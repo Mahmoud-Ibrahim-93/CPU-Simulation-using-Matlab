@@ -126,5 +126,10 @@ Registers.fillLocation(1,2,'Mahmoud');
 Registers.fillLocation(5,2,'Ibrahim');
 Registers.fillLocation(1,1,'Tree');
 Registers.fillLocation(5,1,'Cope');
+Registers.building(5,1).animate(5,2);
+% pause(.2);
+% Registers.building(5,1).moveRight(.15);
+
+
 % handles.k=k;
 guidata(hObject, handles);

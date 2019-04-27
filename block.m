@@ -17,6 +17,7 @@ classdef block < handle
    end
    methods
       
+      % Build the block properties
       function obj = block(floorscount,floor_size,origin_x,origin_y,room_width,room_height)
       if (nargin==1)    
       obj.numberOfFloors=floorscount;  
@@ -52,16 +53,19 @@ classdef block < handle
       obj.loction_default_height=room_height;
       end
       
+      % draw the floors of the building
       for j=1:obj.floorsize
          for i=1:obj.numberOfFloors
+             % location(mytext,loc_x,loc_y,width,height)
             obj.building(i,j)=location(strcat('F no',{' '},string(i)),(j-1)*obj.location_default_width+obj.shift_x,obj.shift_y+(i-1)*obj.loction_default_height,obj.location_default_width,obj.loction_default_height);
+            % draws the loactinon in floor i and squence number j
             obj.building(i,j).paint();
-%             obj.building(i,j).animate();
          end
       end
       
       end
       
+      % fill a certain location with a certain content
       function fillLocation(obj,floor_level,floor_location_no,content)
           if ~isempty(obj.building) && floor_level <=length(obj.building) 
               if(floor_location_no <=size(obj.building,2))

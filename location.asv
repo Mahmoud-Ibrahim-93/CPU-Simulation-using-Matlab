@@ -80,7 +80,7 @@ classdef location < handle
                 set(obj.box,'FaceColor','red')
                 pause(animationLength)
                 set(obj.box,'FaceColor',InitialColor)
-                pause(animationLength)        
+                pause(obj.animationLength)        
             end
         end
       end
