@@ -126,7 +126,9 @@ Registers.fillLocation(1,2,'Mahmoud');
 Registers.fillLocation(5,2,'Ibrahim');
 Registers.fillLocation(1,1,'Tree');
 Registers.fillLocation(5,1,'Cope');
-Registers.building(5,1).animate(5,2);
+% Registers.building(5,1).animate(5,2);
+pause(2)
+Registers.building(5,1).swap(ram.building(10,1));
 % pause(.2);
 % Registers.building(5,1).moveRight(.15);
 

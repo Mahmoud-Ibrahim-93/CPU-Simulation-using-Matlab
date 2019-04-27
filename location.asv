@@ -80,9 +80,15 @@ classdef location < handle
                 set(obj.box,'FaceColor','red')
                 pause(animationLength)
                 set(obj.box,'FaceColor',InitialColor)
-                pause(obj.animationLength)        
+                pause(animationLength)        
             end
         end
+      end
+      function obj=swap(obj,destinationLocation)
+      Locations=[destinationLocation.margin_left,destinationLocation.margin_buttom,obj.margin_left,obj.margin_buttom]
+      obj.margin_left=destinationLocation.margin_left;
+      obj.
+      
       end
    end
 end

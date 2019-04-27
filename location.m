@@ -20,7 +20,9 @@ classdef location < handle
       % Default number of animations
       numberOfAnumations=3;
       % Default Animation length
-      animationLength = .2;
+      animationLength = .4;
+      % Default Animation Steps
+      animationSteps = 20 ;
    end
    methods
       
@@ -83,6 +85,36 @@ classdef location < handle
                 pause(animationLength)        
             end
         end
+      end
+      
+      
+      function obj=swap(obj,destinationLocation)
+          
+          srcLocations=[obj.margin_left,obj.margin_buttom];
+          destLocations=[destinationLocation.margin_left,destinationLocation.margin_buttom];
+          deltaLocations=destLocations-srcLocations;
+          destinationLocation.animate(2);
+          obj.animate(2);
+          
+          for i=1:obj.animationSteps/2
+              obj.margin_left=obj.margin_left+deltaLocations(1)/(obj.animationSteps/2);
+              destinationLocation.margin_left=destinationLocation.margin_left-deltaLocations(1)/(obj.animationSteps/2);
+              obj.paint();
+              destinationLocation.paint();
+              pause(obj.animationLength/2);
+          end
+
+          for i=1:obj.animationSteps/2
+              obj.margin_buttom=obj.margin_buttom+deltaLocations(2)/(obj.animationSteps/2);
+              destinationLocation.margin_buttom=destinationLocation.margin_buttom-deltaLocations(2)/(obj.animationSteps/2);
+              obj.paint();
+              destinationLocation.paint();
+              pause(obj.animationLength/2);
+          end
+          
+          destinationLocation.animate(2);
+          obj.animate(2);
+          
       end
    end
 end
