@@ -1,15 +1,10 @@
-function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
-%ONEOPERAND IS to excute One operand instruction
-
- 
-                
-                if (OpCode>=12)&&(OpCode<=14)
-                 
-                 IR=bitshift(IR,8)+memoryFull(registers(1)+2); % Big Endian
-                 OP1opcode=bitshift(IR,-10);
-                registers(1)=registers(1)+2;
-                AM=bitshift(bitand(IR,768),-8);
-                OP1=bitand(IR,255);
+function [ registers,memory ] = OneOperand( registers,memory,IR )
+%ONEOPERAND IS to excute One operand instruction               
+IR=bitshift(IR,8)+memory(registers(1)+2); % Big Endian
+OP1opcode=bitshift(IR,-10);
+registers(1)=registers(1)+2;
+AM=bitshift(bitand(IR,768),-8);
+OP1=bitand(IR,255);
                 
                 switch OP1opcode
                     
@@ -21,9 +16,9 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                     case 1
                                         registers(bitand(OP1,1)+3)=bitshift(  registers(bitand(OP1,1)+3),1);
                                          case 2
-                                        memoryFull(registers(bitand(OP1,1)+3)+1)=bitshift(memoryFull(registers(bitand(OP1,1)+3)+1),1);
+                                        memory(registers(bitand(OP1,1)+3)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+1),1);
                                     case 3
-                                        memoryFull(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1)=bitshift(memoryFull(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1),1);
+                                        memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1),1);
                           end
                                 
                     case 49 % 110001 -- ASL OP1
@@ -35,9 +30,9 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                     case 1
                                         registers(bitand(OP1,1)+3)=bitshift(  registers(bitand(OP1,1)+3),1);
                                     case 2
-                                        memoryFull(registers(bitand(OP1,1)+3)+1)=bitshift(memoryFull(registers(bitand(OP1,1)+3)+1),1);
+                                        memory(registers(bitand(OP1,1)+3)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+1),1);
                                     case 3
-                                        memoryFull(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1)=bitshift(memoryFull(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1),1);
+                                        memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1),1);
                           end
                                 
                         
@@ -46,13 +41,13 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                           switch AM
                                 
                                     case 0
-                                        memoryFull(registers(4)+1)=OP1;
+                                        memory(registers(4)+1)=OP1;
                                     case 1
-                                        memoryFull(registers(4)+1)=registers(bitand(OP1,1)+3);
+                                        memory(registers(4)+1)=registers(bitand(OP1,1)+3);
                                     case 2
-                                        memoryFull(registers(4)+1)=memoryFull(registers(bitand(OP1,1)+3)+1);
+                                        memory(registers(4)+1)=memory(registers(bitand(OP1,1)+3)+1);
                                     case 3
-                                        memoryFull(registers(4)+1)=memoryFull(registers(bitand(OP1,1)+3)+bitshift(OP1,-1)+1);
+                                        memory(registers(4)+1)=memory(registers(bitand(OP1,1)+3)+bitshift(OP1,-1)+1);
                           end
                                 
                         
@@ -64,11 +59,11 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                     case 0
                                         disp('can not coppy top of the stack to #no')
                                     case 1
-                                        registers(bitand(OP1,1)+3)=memoryFull(registers(4));
+                                        registers(bitand(OP1,1)+3)=memory(registers(4));
                                     case 2
-                                        memoryFull(registers(bitand(OP1,1)+3)+1)=memoryFull(registers(4));
+                                        memory(registers(bitand(OP1,1)+3)+1)=memory(registers(4));
                                     case 3
-                                        memoryFull(bitshift(OP1,-1)+registers(bitand(OP1,1)+3)+1)=memoryFull(registers(4)-1);
+                                        memory(bitshift(OP1,-1)+registers(bitand(OP1,1)+3)+1)=memory(registers(4)-1);
                           end
                                 
                         
@@ -81,9 +76,9 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                     case 1
                                         registers(1)=registers(and(OP1,1)+3);
                                     case 2
-                                        registers(1)=memoryFull(registers(and(OP1,1)+3)+1);
+                                        registers(1)=memory(registers(and(OP1,1)+3)+1);
                                     case 3
-                                        registers(1)= memoryFull(registers(and(OP1,1)+3)+bitshift(OP1,-1)+1);
+                                        registers(1)= memory(registers(and(OP1,1)+3)+bitshift(OP1,-1)+1);
                           end
                                 
                         
@@ -98,9 +93,9 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                          case 1
                                         registers(1)=registers(bitand(OP1,1)+3);
                                     case 2
-                                        registers(1)=memoryFull(registers(bitand(OP1,1)+3)+1);
+                                        registers(1)=memory(registers(bitand(OP1,1)+3)+1);
                                     case 3
-                                        registers(1)=memoryFull(registers(bitand(OP1,1)+3)+bitshift(OP1,-1)+1);
+                                        registers(1)=memory(registers(bitand(OP1,1)+3)+bitshift(OP1,-1)+1);
                                         
                  end
                  end
@@ -109,7 +104,7 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                        
                         %%%
                         registers(2)=registers(2)-1;
-                        memoryFull(registers(2)+1)=registers(1);
+                        memory(registers(2)+1)=registers(1);
                         switch AM
                                 
                                     case 0
@@ -118,14 +113,13 @@ function [ registers,memoryFull ] = OneOperand( registers,memoryFull,OpCode,IR )
                                     case 1
                                         registers(1)=registers(and(OP1,1)+3);
                                     case 2
-                                        registers(1)=memoryFull(registers(and(OP1,1)+3)+1);
+                                        registers(1)=memory(registers(and(OP1,1)+3)+1);
                                     case 3
-                                        registers(1)= memoryFull(registers(and(OP1,1)+3)+bitshift(OP1,-1)+1);
+                                        registers(1)= memory(registers(and(OP1,1)+3)+bitshift(OP1,-1)+1);
                           end
                          otherwise
                           disp('OP code of 1-op inst is out of scope')
                      end
-             end
 
 
 end
