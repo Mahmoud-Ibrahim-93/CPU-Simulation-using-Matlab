@@ -3,16 +3,11 @@ clear %%clear the variables in the workspace
 clc  %%Cmd window clear
 %%import memory data
 %number of locations in memory
+global MemorySize;
 MemorySize=256;
 cycleCount=0;
-[num,txt,raw] =xlsread('memory.xlsx',1,strcat('B2:B',string(MemorySize+1)));
-memory=hex2dec(string(raw));
-%%import registers data
-[num2,txt2,raw2] =xlsread('memory.xlsx',2,'B2:B5');
-% Transform hexadecimal value of the Registers to a decimal value
-registers=hex2dec(string(raw2));
-% From the excel sheet 2
-% Registers(1) PC - Registers(2) SP - Registers(3) R0 - Registers(4) R1
+sheetLocation='memory.xlsx';
+[memory,registers] = ReadMemory(sheetLocation);
 
 while 1
  
