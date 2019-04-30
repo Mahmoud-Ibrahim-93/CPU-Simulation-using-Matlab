@@ -1,4 +1,4 @@
-function [registers,memory ] = ZeroOperand(registers,memory,IR )
+function [registers,memory,IR ] = ZeroOperand(registers,memory,IR )
 % Executes the zero operand instruction
 
 
@@ -13,11 +13,12 @@ function [registers,memory ] = ZeroOperand(registers,memory,IR )
      case 244 % INITSP 
 
          registers(2)=255; %%SP<==FF
-         registers(2)=255;
      case 254 % NOP 
-         continue; % NO Operation
+%          continue; % NO Operation
+     
+
      case 255 % RETURN 
-         break;
+         IR=255;
 
      otherwise
          disp('can not recognise this zero instruction pattern');

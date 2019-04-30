@@ -36,7 +36,7 @@ end
 
 %% Zero-operand instruction
 if OpCode==15
-[registers,memory ] = ZeroOperand(registers,memory,IR );
+[registers,memory,IR ] = ZeroOperand(registers,memory,IR );
 end
 
 cycleCount=cycleCount+1;
