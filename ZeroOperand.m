@@ -1,4 +1,4 @@
-function [registers,memory,IR ] = ZeroOperand(registers,memory,IR )
+function [registers,memory ] = ZeroOperand(registers,memory,IR )
 % Executes the zero operand instruction
 
 % increment PC by 1

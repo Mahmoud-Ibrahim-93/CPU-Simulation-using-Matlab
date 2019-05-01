@@ -1,7 +1,7 @@
 function [ registers,memory,IR ] = OneOperand( registers,memory,IR )
 
 % calculate IR which consists of 16 bit for 1 Operand instructoins
-IR=bitshift(IR,8)+memory(registers(1)+2); % Big Endian
+IR=bitshift(IR,8)+memory{registers(1)+2}; % Big Endian
 % calculate OpCode
 opcode=bitshift(IR,-10);
 % Increase Program counter by 2
@@ -17,18 +17,18 @@ switch opcode
             case 0 % Immediate Addressing mode for the operand 
                 error('can not deal with immediate values')
             case 1 % Register number for the operand given in LSB
-                registers(bitand(OP1,1)+3)=bitshift(registers(bitand(OP1,1)+3),1);
+                registers{bitand(OP1,1)+3}=bitshift(registers{bitand(OP1,1)+3},1);
             case 2 % Register indirect for the operand given in LSB
-                memory(registers(bitand(OP1,1)+3)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+1),1);
+                memory{registers(bitand(OP1,1)+3)+1}=bitshift(memory{registers{bitand(OP1,1)+3}+1},1);
             case 3 % Base Register stored in LSB of the Operand and Displacement stred in the rest bits
-                memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+bitshift(op1,-1)+1),1);
+                memory{registers{bitand(OP1,1)+3}+bitshift(op1,-1)+1}=bitshift(memory{registers{bitand(OP1,1)+3}+bitshift(op1,-1)+1},1);
         end
     case 49 % 110001 -- Arithmetic shift left
         switch AM
             case 0 % Immediate Addressing mode for the operand
                 error('can not deal with immediate values')
             case 1 % Register number for the operand given in LSB
-                registers(bitand(OP1,1)+3)=bitshift(  registers(bitand(OP1,1)+3),1);
+                registers{bitand(OP1,1)+3)=bitshift(  registers(bitand(OP1,1)+3),1);
             case 2 % Register indirect for the operand given in LSB
                 memory(registers(bitand(OP1,1)+3)+1)=bitshift(memory(registers(bitand(OP1,1)+3)+1),1);
             case 3 % Base Register stored in LSB of the Operand and Displacement stred in the rest bits

@@ -7,45 +7,52 @@ global MemorySize;
 MemorySize=256;
 cycleCount=0;
 sheetLocation='memory.xlsx';
-[memory,registers] = ReadMemory(sheetLocation);
-
+simlationStruct=[];
+% [simlationStruct.memory,simlationStruct.registers] = ReadMemory(sheetLocation);
+[simlationStruct.memory(:,cycleCount+1),simlationStruct.registers(:,cycleCount+1)] = ReadMemory(sheetLocation);
 while 1
- 
+
  % Instruction register holds the value which is currently held in the PC
- IR=memory(registers(1)+1);
+ simlationStruct.IR{cycleCount+1}=simlationStruct.memory(simlationStruct.registers(1,cycleCount+1)+1,cycleCount+1);
  
  %The last 4 bit determine if the instruction has 2 Operands (0000 to 1011)
  % or has 1 Operand (1100 to 1110) or has no operand (1111);
- % IR has current 8-bit register and the 4 LSBs determine the Operand type
- OpCode=bitshift(IR,-4);
+ % simlationStruct.IR has current 8-bit register and the 4 LSBs determine the Operand type
+ OpCode=bitshift(simlationStruct.IR{cycleCount+1},-4);
  
 %% 2-operand instruction
 if (OpCode < 12)
-[registers,memory] = TwoOperand (registers,memory,IR);
+[simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1),simlationStruct.IR{cycleCount+1}] = TwoOperand (simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1),simlationStruct.IR{cycleCount+1});
 end
  
 %% 1-operand instruction
 if (OpCode>=12)&&(OpCode<=14)
-[registers,memory ] = OneOperand(registers,memory,IR );
+[simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1),simlationStruct.IR{cycleCount+1} ] = OneOperand(simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1),simlationStruct.IR{cycleCount+1} );
 end
 
 %% Zero-operand instruction
 if OpCode==15
-[registers,memory,IR ] = ZeroOperand(registers,memory,IR );
+[simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1)] = ZeroOperand(simlationStruct.registers(:,cycleCount+1),simlationStruct.memory(:,cycleCount+1),simlationStruct.IR{cycleCount+1} );
 end
 
 cycleCount=cycleCount+1;
-xlswrite('memory.xlsx',cellstr(char(strcat('cycle',{' '},string(cycleCount)))),1,strcat(getColumnCount(cycleCount+2),'1'));
-xlswrite('memory.xlsx',cellstr(dec2hex(memory)),1,strcat(getColumnCount(cycleCount+2),'2'));
-xlswrite('memory.xlsx',cellstr(char(strcat('cycle',{' '},string(cycleCount)))),2,strcat(getColumnCount(cycleCount+2),'1'));
-xlswrite('memory.xlsx',cellstr(dec2hex(registers)),2,strcat(getColumnCount(cycleCount+2),'2'));
-
-if(IR ==255)
+%% write%%
+if(simlationStruct.IR{cycleCount} ==255)
    break; 
 end
 
-end
 
-disp(registers);
-disp(memory);
+ % Copy a version of the prev memory and register state
+  simlationStruct.memory(:,cycleCount+1)=simlationStruct.memory(:,cycleCount);
+  simlationStruct.registers(:,cycleCount+1)=simlationStruct.registers(:,cycleCount);
+end
+write2Excel(sheetLocation,simlationStruct);
+for i=1:length(simlationStruct.IR)
+    temp=dec2hex(simlationStruct.IR{i});
+    if length(temp)==3
+        disp(dec2hex(simlationStruct.IR{i},4));
+    else
+        disp(dec2hex(simlationStruct.IR{i}));
+    end
+end
 toc % Elapsed time counter
