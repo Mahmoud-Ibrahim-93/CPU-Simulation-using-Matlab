@@ -9,6 +9,15 @@ cycleCount=0;
 sheetLocation='memory.xlsx';
 simulationStruct=[];
 
+
+% isSix = cellfun(@(x)isequal(x,2),simlationStruct.addressingModes(:,1));
+% [row,col] = find(isSix);
+if( newMemoryRegisterData<=0)
+load('oldSimulationData.mat','simulationStruct');
+return
+end
+
+if( newMemoryRegisterData>0)
 % Supported Addressing modes
 simulationStruct.addressingModes={
 0,'The immediate value is stored in the Value/Address field of the instruction';
@@ -34,12 +43,10 @@ simulationStruct.supportedInstructions={
 254,'No Operation';
 255,'Stop execution'
 };
-
-% isSix = cellfun(@(x)isequal(x,2),simlationStruct.addressingModes(:,1));
-% [row,col] = find(isSix);
-
+    
 %%import memory data
 [simulationStruct.memory(:,cycleCount+1),simulationStruct.registers(:,cycleCount+1)] = ReadMemory(sheetLocation);
+end
 while 1
 
  % Instruction register holds the value which is currently held in the PC
@@ -76,13 +83,15 @@ end
   simulationStruct.memory(:,cycleCount+1)=simulationStruct.memory(:,cycleCount);
   simulationStruct.registers(:,cycleCount+1)=simulationStruct.registers(:,cycleCount);
 end
+
+if( newMemoryRegisterData>0)
 % write the Execution data to the Excel
-% write2Excel(sheetLocation,simlationStruct);
+write2Excel(sheetLocation,simulationStruct);
+save('oldSimulationData.mat','simulationStruct') 
+end
 
 % Display Execution Instructions for debugging purposes
 % dispInstrictions(simlationStruct);
-if( newMemoryRegisterData>0)
-   save('oldSimulationData.mat','simulationStruct') 
-end
+
 toc % Elapsed time counter
 end
