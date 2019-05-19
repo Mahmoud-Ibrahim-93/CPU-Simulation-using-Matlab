@@ -89,6 +89,7 @@ set(handles.axes1,'Position',[.05 0.05 .9 0.9])
 title(handles.axes1,'CPU Simulation')
 % Set the Window default state to be maximized
 hObject.WindowState='Maximized';
+
 % normalize objects units
 set(handles.memorySlider,'Units','normalized')
 set(handles.jmp2End,'Units','normalized')
@@ -117,21 +118,17 @@ box on
 handles.memorySlider.Max=255;
 handles.memorySlider.Min=0;
 handles.memorySlider.SliderStep=[1/255,1/255];
-% set this flag to 1 if you change either the memory instructions or Registers
-NewMemoryDataEntered=0;
-
-simulationStruct=startSimulation(NewMemoryDataEntered);
 
 % block(floorscount,floor_rooms_count,origin_x,origin_y,room_width,room_height)
-ram_title= block(1,1,.68,.6,.3,.1);
+ram_title= block(1,1,.68,.6,.3,.15);
 ram_title.fillLocation(1,1,'Main Memory');
-ram_title.building(1,1).txtObj.FontSize=35;
+ram_title.building(1,1).txtObj.FontSize=51;
 ram= block(10,2,.68);
 
 
-Registers_title= block(1,1,.050,.6,.3,.1);
+Registers_title= block(1,1,.050,.6,.3,.15);
 Registers_title.fillLocation(1,1,'Registers');
-Registers_title.building(1,1).txtObj.FontSize=35;
+Registers_title.building(1,1).txtObj.FontSize=51;
 Registers=block (10,2,0.05,.05);
 % set(handles.axes1,'Resize','off');
 
