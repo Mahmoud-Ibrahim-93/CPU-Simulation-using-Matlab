@@ -1,9 +1,8 @@
-function [simulationStruct]=startSimulation(newMemoryRegisterData)
+function [MemorySize,simulationStruct]=startSimulation(newMemoryRegisterData)
 
 tic %%Elapsed time Counter start
 % clc  %%Cmd window clear
 %number of locations in memory
-global MemorySize;
 MemorySize=256;
 cycleCount=0;
 sheetLocation='memory.xlsx';

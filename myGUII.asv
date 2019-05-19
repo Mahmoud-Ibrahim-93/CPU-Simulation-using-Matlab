@@ -22,7 +22,7 @@ function varargout = myGUII(varargin)
 
 % Edit the above text to modify the response to help myGUII
 
-% Last Modified by GUIDE v2.5 18-May-2019 18:33:54
+% Last Modified by GUIDE v2.5 19-May-2019 22:51:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -93,9 +93,21 @@ hObject.WindowState='Maximized';
 set(handles.memorySlider,'Units','normalized')
 set(handles.jmp2End,'Units','normalized')
 set(handles.startBtn,'Units','normalized')
+set(handles.updateSim,'Units','normalized')
+set(handles.pauseResumeBtn,'Units','normalized')
+
 % Adjust the position of txt jump2End
 % 'Position' is [x y width height])
 set(handles.jmp2End,'Position',[0.05 0.95 0.3 0.04])
+
+% Adjust the position of button updateSim
+% 'Position' is [x y width height])
+set(handles.updateSim,'Position',[0.23 0.95 0.15 0.04])
+
+% Adjust the position of PAUSE/RESUME button 
+% 'Position' is [x y width height])
+set(handles.pauseResumeBtn,'Position',[0.615 0.95 0.15 0.04])
+
 % Adjust the position of strat button
 % 'Position' is [x y width height])
 set(handles.startBtn,'Position',[.8 0.95 0.15 0.04])
@@ -117,51 +129,66 @@ box on
 handles.memorySlider.Max=255;
 handles.memorySlider.Min=0;
 handles.memorySlider.SliderStep=[1/255,1/255];
-% set this flag to 1 if you change either the memory instructions or Registers
-NewMemoryDataEntered=0;
-NumberOfDisplayedMemoryLocations=16;
-simulationStruct=startSimulation(NewMemoryDataEntered);
+handles.NumberOfDisplayedMemoryLocations=15;
 
 
 % block(floorscount,floor_rooms_count,origin_x,origin_y,room_width,room_height)
-ram_title= block(1,1,.68,.9,.3,.08);
-ram_title.fillLocation(1,1,'Main Memory');
-ram_title.building(1,1).txtObj.FontSize=32;
-ram= block(NumberOfDisplayedMemoryLocations,2,.68);
+handles.ram_title= block(1,1,.68,.9,.3,.08);
+handles.ram_title.fillLocation(1,1,'Main Memory');
+handles.ram_title.building(1,1).txtObj.FontSize=32;
+handles.ram_subTitles= block(1,2,.68,.8,.15,.04);
+handles.ram_subTitles.fillLocation(1,1,'Address');
+handles.ram_subTitles.building(1,1).txtObj.FontSize=26;
+handles.ram_subTitles.fillLocation(1,2,'Value');
+handles.ram_subTitles.building(1,2).txtObj.FontSize=26;
+
+handles.ram= block(handles.NumberOfDisplayedMemoryLocations,2,.68);
 
 
-Registers_title= block(1,1,.050,.3,.3,.08);
-Registers_title.fillLocation(1,1,'Registers');
-Registers_title.building(1,1).txtObj.FontSize=32;
-Registers=block (4,2,0.05,.05);
-Registers.fillLocation(1,1,'Program Counter-PC');
-Registers.fillLocation(2,1,'Stack Pointer SP');
-Registers.fillLocation(3,1,'General Register R0');
-Registers.fillLocation(4,1,'General Register R1');
+for i = 1 : size(handles.ram.
 
-IR_title= block(1,1,.050,.9,.18,.05);
-IR_title.fillLocation(1,1,'Executed Instruction');
-IR_title.building(1,1).txtObj.FontSize=20;
 
-IR_Value= block(1,1,.25,.9,.18,.05);
-IR_Value.fillLocation(1,1,'FFFFFFFF');
-IR_Value.building(1,1).txtObj.FontSize=20;
+handles.Registers_title= block(1,1,.050,.3,.3,.08);
+handles.Registers_title.fillLocation(1,1,'Registers');
+handles.Registers_title.building(1,1).txtObj.FontSize=32;
+handles.Registers=block (4,2,0.05,.05);
+handles.Registers.fillLocation(1,1,'Program Counter-PC');
+handles.Registers.fillLocation(2,1,'Stack Pointer SP');
+handles.Registers.fillLocation(3,1,'General Register R0');
+handles.Registers.fillLocation(4,1,'General Register R1');
 
-InstructionDescription= block(1,1,.05,.7,.45,.2);
-q1='\n.';
-s=sprintf('Register number is encoded by the leastsignificant\n bit (LSB) of the Value/Address field', filename2, pathname2);
-InstructionDescription.fillLocation(1,1,s);
-InstructionDescription.building(1,1).txtObj.FontSize=20;
-% set(handles.axes1,'Resize','off');
+handles.IR_title= block(1,1,.050,.9,.18,.05);
+handles.IR_title.fillLocation(1,1,'Executed Instruction');
+handles.IR_title.building(1,1).txtObj.FontSize=20;
 
-% ram.fillLocation(1,2,'Mahmoud');
-% ram.fillLocation(5,2,'Ibrahim');
-% ram.fillLocation(1,1,'Tree');
-% ram.fillLocation(5,1,'Cope');
-% Registers.fillLocation(1,2,'Mahmoud');
-% Registers.fillLocation(5,2,'Ibrahim');
-% Registers.fillLocation(1,1,'Tree');
-% Registers.fillLocation(5,1,'Cope');
+handles.IR_Value= block(1,1,.25,.9,.19,.05);
+handles.IR_Value.fillLocation(1,1,'00000000000000000');
+handles.IR_Value.building(1,1).txtObj.FontSize=20;
+
+
+handles.InstructionDescription= block(1,1,.05,.7,.45,.2);
+s='Here Lies the Description of the instruction being\nexecuted';
+handles.InstructionDescription.fillLocation(1,1,sprintf(s));
+handles.InstructionDescription.building(1,1).txtObj.FontSize=20;
+
+handles.AddressingMode_title= block(1,1,.050,.6,.18,.05);
+handles.AddressingMode_title.fillLocation(1,1,'Addressing mode');
+handles.AddressingMode_title.building(1,1).txtObj.FontSize=20;
+
+handles.AddressingMode_Value= block(1,1,.25,.6,.19,.05);
+handles.AddressingMode_Value.fillLocation(1,1,'0');
+handles.AddressingMode_Value.building(1,1).txtObj.FontSize=20;
+
+
+handles.AddressingModeDescription= block(1,1,.05,.4,.45,.2);
+s='Here Lies the Description of the Addressing mode\nbeing executed';
+handles.AddressingModeDescription.fillLocation(1,1,sprintf(s));
+handles.AddressingModeDescription.building(1,1).txtObj.FontSize=20;
+
+[handles.MemorySize,handles.simulationStruct]=startSimulation(0);
+
+guidata(hObject, handles);
+
 % pause(2)
 % Registers.building(5,1).swap(ram.building(10,1));
 % pause(.2);
@@ -218,3 +245,21 @@ function memorySlider_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+
+% --- Executes on button press in updateSim.
+function updateSim_Callback(hObject, eventdata, handles)
+% hObject    handle to updateSim (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+msgbox('Please wait until simulation object is created then the color of the axes would change')
+[handles.MemorySize,handles.simulationStruct]=startSimulation(1);
+guidata(hObject, handles);
+set(handles.axes1,'Color',[rand rand rand])
+
+
+% --- Executes on button press in pauseResumeBtn.
+function pauseResumeBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to pauseResumeBtn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
