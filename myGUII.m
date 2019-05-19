@@ -119,20 +119,55 @@ handles.memorySlider.Min=0;
 handles.memorySlider.SliderStep=[1/255,1/255];
 % set this flag to 1 if you change either the memory instructions or Registers
 NewMemoryDataEntered=0;
-
+NumberOfDisplayedMemoryLocations=16;
 simulationStruct=startSimulation(NewMemoryDataEntered);
 
+
 % block(floorscount,floor_rooms_count,origin_x,origin_y,room_width,room_height)
-ram_title= block(1,1,.68,.6,.3,.1);
+ram_title= block(1,1,.68,.9,.3,.08);
 ram_title.fillLocation(1,1,'Main Memory');
-ram_title.building(1,1).txtObj.FontSize=35;
-ram= block(10,2,.68);
+ram_title.building(1,1).txtObj.FontSize=32;
+ram= block(NumberOfDisplayedMemoryLocations,2,.68);
 
 
-Registers_title= block(1,1,.050,.6,.3,.1);
+Registers_title= block(1,1,.050,.3,.3,.08);
 Registers_title.fillLocation(1,1,'Registers');
-Registers_title.building(1,1).txtObj.FontSize=35;
-Registers=block (10,2,0.05,.05);
+Registers_title.building(1,1).txtObj.FontSize=32;
+Registers=block (4,2,0.05,.05);
+Registers.fillLocation(1,1,'Program Counter-PC');
+Registers.fillLocation(2,1,'Stack Pointer SP');
+Registers.fillLocation(3,1,'General Register R0');
+Registers.fillLocation(4,1,'General Register R1');
+
+IR_title= block(1,1,.050,.9,.18,.05);
+IR_title.fillLocation(1,1,'Executed Instruction');
+IR_title.building(1,1).txtObj.FontSize=20;
+
+IR_Value= block(1,1,.25,.9,.19,.05);
+IR_Value.fillLocation(1,1,'00000000000000000');
+IR_Value.building(1,1).txtObj.FontSize=20;
+
+
+InstructionDescription= block(1,1,.05,.7,.45,.2);
+s='Here Lies the Description of the instruction being\nexecuted';
+InstructionDescription.fillLocation(1,1,sprintf(s));
+InstructionDescription.building(1,1).txtObj.FontSize=20;
+
+AddressingMode_title= block(1,1,.050,.6,.18,.05);
+AddressingMode_title.fillLocation(1,1,'Addressing mode');
+AddressingMode_title.building(1,1).txtObj.FontSize=20;
+
+AddressingMode_Value= block(1,1,.25,.6,.19,.05);
+AddressingMode_Value.fillLocation(1,1,'0');
+AddressingMode_Value.building(1,1).txtObj.FontSize=20;
+
+
+AddressingModeDescription= block(1,1,.05,.4,.45,.2);
+s='Here Lies the Description of the Addressing mode\nbeing executed';
+AddressingModeDescription.fillLocation(1,1,sprintf(s));
+AddressingModeDescription.building(1,1).txtObj.FontSize=20;
+
+
 % set(handles.axes1,'Resize','off');
 
 % ram.fillLocation(1,2,'Mahmoud');

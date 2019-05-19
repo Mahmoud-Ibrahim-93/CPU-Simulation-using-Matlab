@@ -57,7 +57,8 @@ classdef block < handle
       for j=1:obj.floorsize
          for i=1:obj.numberOfFloors
              % location(mytext,loc_x,loc_y,width,height)
-            obj.building(i,j)=location(strcat('F no',{' '},string(i)),(j-1)*obj.location_default_width+obj.shift_x,obj.shift_y+(i-1)*obj.loction_default_height,obj.location_default_width,obj.loction_default_height);
+%             obj.building(i,j)=location(strcat('F no',{' '},string(i)),(j-1)*obj.location_default_width+obj.shift_x,obj.shift_y+(i-1)*obj.loction_default_height,obj.location_default_width,obj.loction_default_height);
+            obj.building(i,j)=location('',(j-1)*obj.location_default_width+obj.shift_x,obj.shift_y+(i-1)*obj.loction_default_height,obj.location_default_width,obj.loction_default_height);
             % draws the loactinon in floor i and squence number j
             obj.building(i,j).paint();
          end
@@ -67,9 +68,9 @@ classdef block < handle
       
       % fill a certain location with a certain content
       function fillLocation(obj,floor_level,floor_location_no,content)
-          if ~isempty(obj.building) && floor_level <=length(obj.building) 
+          if ~isempty(obj.building) && floor_level <=size(obj.building,1) 
               if(floor_location_no <=size(obj.building,2))
-                  set(obj.building(floor_level,floor_location_no).txtObj,'String',content)
+                  set(obj.building(size(obj.building,1)-floor_level+1,floor_location_no).txtObj,'String',content)
               end
           end
       end
