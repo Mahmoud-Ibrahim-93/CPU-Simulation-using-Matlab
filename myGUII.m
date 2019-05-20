@@ -116,7 +116,7 @@ box on
 handles.memorySlider.Max=handles.MemorySize-handles.NumberOfDisplayedMemoryLocations;
 handles.memorySlider.Min=0;
 handles.memorySlider.SliderStep=[1/(handles.MemorySize-1),1/(handles.MemorySize-1)];
-
+handles.memorySlider.Value=handles.memorySlider.Max;
 
 % block(floorscount,floor_rooms_count,origin_x,origin_y,room_width,room_height)
 handles.ram_title= block(1,1,.68,.9,.3,.08);
@@ -279,8 +279,8 @@ function memorySlider_Callback(hObject, eventdata, handles)
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 pivot=round(handles.memorySlider.Value);
 count=0;
-for i =  pivot+handles.NumberOfDisplayedMemoryLocations-1:-1:pivot
-    handles.ram.fillLocation(handles.NumberOfDisplayedMemoryLocations-count,1,strcat('0x',dec2hex(i,8)));
+for i =  pivot:pivot+handles.NumberOfDisplayedMemoryLocations-1
+    handles.ram.fillLocation(handles.NumberOfDisplayedMemoryLocations-count,1,strcat('0x',dec2hex(handles.MemorySize-i-1,8)));
 %     drawnow
     count=count+1;
 
