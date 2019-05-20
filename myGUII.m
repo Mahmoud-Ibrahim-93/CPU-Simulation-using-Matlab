@@ -56,34 +56,20 @@ function myGUII_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Update handles structure
-guidata(hObject, handles);
 set(handles.axes1,'Units','normalized')
 set(handles.figure1,'PaperUnits','normalized')
-
-% UIWAIT makes myGUII wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+handles.NumberOfDisplayedMemoryLocations=15;
 
 
-% --- Outputs from this function are returned to the command line.
-function varargout = myGUII_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
-varargout{1} = handles.output;
 
 
-% --- Executes when figure1 is resized.
-function figure1_SizeChangedFcn(hObject, eventdata, handles)
-% hObject    handle to figure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Make Axes acquire most .85 of the width and .85 of the height of the GUI
+
+
+
 set(handles.axes1,'Position',[.05 0.05 .9 0.9])
 
+[handles.MemorySize,handles.simulationStruct]=startSimulation(0);
 
 % Set the GUI title
 title(handles.axes1,'CPU Simulation')
@@ -95,6 +81,7 @@ set(handles.jmp2End,'Units','normalized')
 set(handles.startBtn,'Units','normalized')
 set(handles.updateSim,'Units','normalized')
 set(handles.pauseResumeBtn,'Units','normalized')
+
 
 % Adjust the position of txt jump2End
 % 'Position' is [x y width height])
@@ -126,10 +113,9 @@ set(handles.axes1,'ytick',[]);
 % Create a box around the drawing
 box on
 
-handles.memorySlider.Max=255;
+handles.memorySlider.Max=handles.MemorySize-handles.NumberOfDisplayedMemoryLocations;
 handles.memorySlider.Min=0;
-handles.memorySlider.SliderStep=[1/255,1/255];
-handles.NumberOfDisplayedMemoryLocations=15;
+handles.memorySlider.SliderStep=[1/(handles.MemorySize-1),1/(handles.MemorySize-1)];
 
 
 % block(floorscount,floor_rooms_count,origin_x,origin_y,room_width,room_height)
@@ -141,7 +127,6 @@ handles.ram_subTitles.fillLocation(1,1,'Address');
 handles.ram_subTitles.building(1,1).txtObj.FontSize=26;
 handles.ram_subTitles.fillLocation(1,2,'Value');
 handles.ram_subTitles.building(1,2).txtObj.FontSize=26;
-
 handles.ram= block(handles.NumberOfDisplayedMemoryLocations,2,.68);
 
 
@@ -187,9 +172,53 @@ s='Here Lies the Description of the Addressing mode\nbeing executed';
 handles.AddressingModeDescription.fillLocation(1,1,sprintf(s));
 handles.AddressingModeDescription.building(1,1).txtObj.FontSize=20;
 
-[handles.MemorySize,handles.simulationStruct]=startSimulation(0);
+
+
+
+
+
+
+
+
+
 
 guidata(hObject, handles);
+
+
+
+
+
+
+
+
+
+% UIWAIT makes myGUII wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = myGUII_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+% --- Executes when figure1 is resized.
+function figure1_SizeChangedFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% Set the Window default state to be maximized
+hObject.WindowState='Maximized';
+
+
+% guidata(hObject, handles);
 
 % pause(2)
 % Registers.building(5,1).swap(ram.building(10,1));
@@ -224,7 +253,21 @@ function startBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to startBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% guidata(hObject, handles);
+% pivot=round(handles.memorySlider.Value);
+% count=1;
+% for i = pivot : pivot+handles.NumberOfDisplayedMemoryLocations-1
+%     disp(handles.ram.building(count,1).txtObj.String);
+% %     set(handles.ram.building(count,1).txtObj,'String','fffffffff');
+% %     drawnow
+%     disp(handles.ram.building(count,1).txtObj.String);
+%     handles.ram.fillLocation(count,1,'fffffffff');
+%     drawnow
+%     count=count+1;
+% end
+% guidata(hObject, handles);
 
+disp(handles.memorySlider.Value)
 
 % --- Executes on slider movement.
 function memorySlider_Callback(hObject, eventdata, handles)
@@ -234,7 +277,17 @@ function memorySlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-disp(handles.memorySlider.Value)
+pivot=round(handles.memorySlider.Value);
+count=0;
+for i =  pivot+handles.NumberOfDisplayedMemoryLocations-1:-1:pivot
+    handles.ram.fillLocation(handles.NumberOfDisplayedMemoryLocations-count,1,strcat('0x',dec2hex(i,8)));
+%     drawnow
+    count=count+1;
+
+end
+
+guidata(hObject, handles);
+
 
 % --- Executes during object creation, after setting all properties.
 function memorySlider_CreateFcn(hObject, eventdata, handles)

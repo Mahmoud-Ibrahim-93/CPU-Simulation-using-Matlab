@@ -84,6 +84,7 @@ function figure1_SizeChangedFcn(hObject, eventdata, handles)
 % Make Axes acquire most .85 of the width and .85 of the height of the GUI
 set(handles.axes1,'Position',[.05 0.05 .9 0.9])
 
+[handles.MemorySize,handles.simulationStruct]=startSimulation(0);
 
 % Set the GUI title
 title(handles.axes1,'CPU Simulation')
@@ -95,6 +96,7 @@ set(handles.jmp2End,'Units','normalized')
 set(handles.startBtn,'Units','normalized')
 set(handles.updateSim,'Units','normalized')
 set(handles.pauseResumeBtn,'Units','normalized')
+
 
 % Adjust the position of txt jump2End
 % 'Position' is [x y width height])
@@ -126,9 +128,9 @@ set(handles.axes1,'ytick',[]);
 % Create a box around the drawing
 box on
 
-handles.memorySlider.Max=255;
+handles.memorySlider.Max=handles.MemorySize-1;
 handles.memorySlider.Min=0;
-handles.memorySlider.SliderStep=[1/255,1/255];
+handles.memorySlider.SliderStep=[1/(handles.MemorySize-1),1/(handles.MemorySize-1)];
 handles.NumberOfDisplayedMemoryLocations=15;
 
 
@@ -141,11 +143,13 @@ handles.ram_subTitles.fillLocation(1,1,'Address');
 handles.ram_subTitles.building(1,1).txtObj.FontSize=26;
 handles.ram_subTitles.fillLocation(1,2,'Value');
 handles.ram_subTitles.building(1,2).txtObj.FontSize=26;
-
+handles.test=text(0,.05,'qqq');
 handles.ram= block(handles.NumberOfDisplayedMemoryLocations,2,.68);
 
 
-for i = 1 : size(handles.ram.
+for i = 0 : size(handles.ram.building,1)-1
+    handles.ram.fillLocation(i+1,1,strcat('0x',dec2hex(i,8)));
+end
 
 
 handles.Registers_title= block(1,1,.050,.3,.3,.08);
@@ -185,7 +189,6 @@ s='Here Lies the Description of the Addressing mode\nbeing executed';
 handles.AddressingModeDescription.fillLocation(1,1,sprintf(s));
 handles.AddressingModeDescription.building(1,1).txtObj.FontSize=20;
 
-[handles.MemorySize,handles.simulationStruct]=startSimulation(0);
 
 guidata(hObject, handles);
 
@@ -222,7 +225,21 @@ function startBtn_Callback(hObject, eventdata, handles)
 % hObject    handle to startBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% guidata(hObject, handles);
+% pivot=round(handles.memorySlider.Value);
+% count=1;
+% for i = pivot : pivot+handles.NumberOfDisplayedMemoryLocations-1
+%     disp(handles.ram.building(count,1).txtObj.String);
+% %     set(handles.ram.building(count,1).txtObj,'String','fffffffff');
+% %     drawnow
+%     disp(handles.ram.building(count,1).txtObj.String);
+%     handles.ram.fillLocation(count,1,'fffffffff');
+%     drawnow
+%     count=count+1;
+% end
+% guidata(hObject, handles);
 
+disp(handles.memorySlider.Value)
 
 % --- Executes on slider movement.
 function memorySlider_Callback(hObject, eventdata, handles)
@@ -232,6 +249,20 @@ function memorySlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+pivot=round(handles.memorySlider.Value);
+handles.test.String='ppppq';
+refresh(handles.axes1)
+count=1;
+for i =  pivot+handles.NumberOfDisplayedMemoryLocations-1:-1:pivot
+    handles.ram.building(count,1).txtObj.String='Off';
+%     set(handles.ram.building(count,2).txtObj,'String','fffffffff');
+%     drawnow
+%     disp(handles.ram.building(count,2).txtObj.String);
+%     handles.ram.fillLocation(count,1,strcat('0x',dec2hex(i,8)));
+    count=count+1;
+end
+guidata(hObject, handles);
+
 disp(handles.memorySlider.Value)
 
 % --- Executes during object creation, after setting all properties.

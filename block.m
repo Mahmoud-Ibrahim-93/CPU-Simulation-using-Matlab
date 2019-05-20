@@ -1,4 +1,4 @@
-classdef block < handle
+classdef block 
    properties
    %number of floors
    numberOfFloors=10;
