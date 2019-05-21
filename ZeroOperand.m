@@ -1,6 +1,7 @@
-function [registers,memory ] = ZeroOperand(registers,memory,IR )
+function [IR,AM,registers,memory ] = ZeroOperand(registers,memory,IR )
 % Executes the zero operand instruction
-
+% Noaddressing mode return
+AM=[-1,-1];
 % increment PC by 1
  registers(1)=registers(1)+1;
  switch IR

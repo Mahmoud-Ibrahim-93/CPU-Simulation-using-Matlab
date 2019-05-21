@@ -1,4 +1,4 @@
-function [ registers,memory,IR ] = OneOperand( registers,memory,IR )
+function [opcode,AddressingMode,registers,memory,IR ] = OneOperand( registers,memory,IR )
 
 % calculate IR which consists of 16 bit for 1 Operand instructoins
 IR=bitshift(IR,8)+memory(registers(1)+2); % Big Endian
@@ -10,7 +10,7 @@ registers(1)=registers(1)+2;
 AM=bitshift(bitand(IR,768),-8);
 % Calculate Operand 1
 OP1=bitand(IR,255);
-
+AddressingMode=[-1,AM];
 switch opcode
     case 48 % 110000 -- Left shift Operand 1 one bit to the left
         switch AM

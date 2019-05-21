@@ -19,10 +19,10 @@ end
 if( newMemoryRegisterData>0)
 % Supported Addressing modes
 simulationStruct.addressingModes={
-0,'The immediate value is stored in the Value/Address field of the instruction';
-1,'Register number is encoded by the leastsignificant bit (LSB) of the Value/Address field.';
-2,'Register the Value/Address number is encoded by the LSB field';
-3,'Register the Value/Address number is encoded by the LSB field';
+0,'The immediate value is stored in the Value/Address\n field of the instruction';
+1,'Register number is encoded by the least significant\n bit (LSB) of the Value/Address field.';
+2,'Register Indirect: Register is encoded\n by the LSB field';
+3,'Base Register number is encoded by the LSB field of the VA field\nDisplacement is encoded by the rest of the VA field.';
 };
 % Supported instructions
 simulationStruct.supportedInstructions={
@@ -31,12 +31,12 @@ simulationStruct.supportedInstructions={
 3,'Subtract Op2 from Op1 and store the result to Op1';
 8,'XOR Op2 with Op1 and store the result to Op1';
 48,'Shift Op1 logically one-bit position to the left.';
-49,'Shift Op1 arithmetically one-bit position to the left';
-52,'Decrement SP, and then put Op1 on top of the stack';
-53,'Copy the top element of the stack to Op1, and then increment SP';
-56,'Branch to an address specified by the VA field of Op1';
-57,'Decrement R0, and check its new value. If it is not zero, branch to the address specified by the VA field of Op1';
-59,'Call a subroutine whose address is specified by the VA field of Op1. The return address is saved to the stack';
+49,'Shift Op1 arithmetically one-bit\nposition to the left';
+52,'Decrement SP, and then put Op1\non top of the stack';
+53,'Copy the top element of the\nstack to Op1, and then increment SP';
+56,'Branch to an address specified\nby the VA field of Op1';
+57,'Decrement R0, and check its new value.\nIf it is not zero, branch to the address\nspecified by the VA field of Op1';
+59,'Call a subroutine whose address\nis specified by the VA field of Op1.\nThe return address is saved to the stack';
 242,'Return from a subroutine call. The return address is restored fromthe stack';
 244,'Load SP with a binary value of 11111111';
 254,'No Operation';
@@ -44,7 +44,7 @@ simulationStruct.supportedInstructions={
 };
     
 %%import memory data
-[simulationStruct.memory(:,cycleCount+1),simulationStruct.registers(:,cycleCount+1)] = ReadMemory(sheetLocation);
+[simulationStruct.memory(:,cycleCount+1),simulationStruct.registers(:,cycleCount+1)] = ReadMemory(sheetLocation,MemorySize);
 end
 while 1
 
@@ -58,17 +58,17 @@ while 1
  
 %% 2-operand instruction
 if (OpCode < 12)
-[simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1}] = TwoOperand (simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1});
+[simulationStruct.opcode(cycleCount+1),simulationStruct.AM(cycleCount+1,:),simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1}] = TwoOperand (simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1});
 end
  
 %% 1-operand instruction
 if (OpCode>=12)&&(OpCode<=14)
-[simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} ] = OneOperand(simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} );
+[simulationStruct.opcode(cycleCount+1),simulationStruct.AM(cycleCount+1,:),simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} ] = OneOperand(simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} );
 end
 
 %% Zero-operand instruction
 if OpCode==15
-[simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1)] = ZeroOperand(simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} );
+[simulationStruct.opcode(cycleCount+1),simulationStruct.AM(cycleCount+1,:),simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1)] = ZeroOperand(simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} );
 end
 
 cycleCount=cycleCount+1;

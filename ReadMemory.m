@@ -1,6 +1,5 @@
-function [memory,registers] = ReadMemory(sheetLocation)
+function [memory,registers] = ReadMemory(sheetLocation,MemorySize)
 %READMEMORY data ( Main memory & Registers )
-global MemorySize;
 [num,txt,raw] =xlsread(sheetLocation,1,strcat('B2:B',string(MemorySize+1)));
 memory=hex2dec(string(raw));
 %%import registers data

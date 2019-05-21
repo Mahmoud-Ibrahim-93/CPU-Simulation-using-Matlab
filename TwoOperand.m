@@ -1,4 +1,4 @@
-function [ registers,memory,IR] = TwoOperand (registers,memory,IR)
+function [OpCode,addressingMode,registers,memory,IR] = TwoOperand (registers,memory,IR)
 OpCode=bitshift(IR,-4);
 IR=bitshift(IR,8)+memory(registers(1)+2); % Big Endian
 registers(1)=registers(1)+2; %PC
@@ -7,7 +7,7 @@ AM1=bitshift(bitand(IR,3072),-10);
 
 % AM2 Addressing mode for operand 2
 AM2=bitshift(bitand(IR,48),-4);
-
+addressingMode=[AM1,AM2];
 % Op1 Operand 1 Value
 OP1=bitshift(bitand(IR,960),-6);
 
