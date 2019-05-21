@@ -135,14 +135,55 @@ for i = 0 : size(handles.ram.building,1)-1
 end
 
 
-handles.Registers_title= block(1,1,.050,.3,.3,.08);
+handles.Registers_title= block(1,1,.050,.3,.2,.08);
 handles.Registers_title.fillLocation(1,1,'Registers');
 handles.Registers_title.building(1,1).txtObj.FontSize=32;
-handles.Registers=block (4,2,0.05,.05);
-handles.Registers.fillLocation(1,1,'Program Counter-PC');
-handles.Registers.fillLocation(2,1,'Stack Pointer SP');
-handles.Registers.fillLocation(3,1,'General Register R0');
-handles.Registers.fillLocation(4,1,'General Register R1');
+handles.Registers=block (4,1,0.2,.05,.05,.05);
+handles.Registers_l=block (4,1,0.05,.05);
+handles.Registers_l.fillLocation(1,1,'Program Counter-PC');
+handles.Registers_l.fillLocation(2,1,'Stack Pointer SP');
+handles.Registers_l.fillLocation(3,1,'General Register R0');
+handles.Registers_l.fillLocation(4,1,'General Register R1');
+
+
+handles.Operands=block (3,1,0.28,.05,.1,.115);
+handles.Operands.fillLocation(1,1,'2-Op Instruction');
+handles.Operands.fillLocation(2,1,'1-Op Instruction');
+handles.Operands.fillLocation(3,1,'0-Op Instruction');
+
+handles.slice_1=block (1,3,0.38,.337,.08,.0575);
+handles.slice_1.fillLocation(1,1,' 4-bit Opcode');
+handles.slice_1.building(1,1).txtObj.FontSize=10;
+handles.slice_1.fillLocation(1,2,' 6-bit Op1');
+handles.slice_1.building(1,2).txtObj.FontSize=10;
+handles.slice_1.fillLocation(1,3,' 6-bit Op2');
+handles.slice_1.building(1,3).txtObj.FontSize=10;
+
+handles.slice_2=block (1,2,0.38,.28,.12,.0575);
+handles.slice_2.fillLocation(1,1,' 2-bit Addressing mode');
+handles.slice_2.building(1,1).txtObj.FontSize=10;
+handles.slice_2.fillLocation(1,2,' 4-bit Address/Value');
+handles.slice_2.building(1,2).txtObj.FontSize=10;
+
+handles.slice_2=block (1,2,0.38,.2225,.12,.0575);
+handles.slice_2.fillLocation(1,1,' 6-bit Opcode');
+handles.slice_2.building(1,1).txtObj.FontSize=10;
+handles.slice_2.fillLocation(1,2,' 10-bit Op1');
+handles.slice_2.building(1,2).txtObj.FontSize=10;
+
+handles.slice_2=block (1,2,0.38,.165,.12,.0575);
+handles.slice_2.fillLocation(1,1,' 2-bit AM');
+handles.slice_2.building(1,1).txtObj.FontSize=10;
+handles.slice_2.fillLocation(1,2,' 8-bit Value/Address');
+handles.slice_2.building(1,2).txtObj.FontSize=10;
+
+handles.slice_3=block (1,1,0.38,.05,.24,.1150);
+handles.slice_3.fillLocation(1,1,'                        8-bit Opcode');
+% handles.slice_3.building(1,1).txtObj.FontSize=10;
+
+
+
+
 
 handles.IR_title= block(1,1,.050,.9,.18,.05);
 handles.IR_title.fillLocation(1,1,'Executed Instruction');
@@ -153,7 +194,7 @@ handles.IR_Value.fillLocation(1,1,'0000');
 handles.IR_Value.building(1,1).txtObj.FontSize=20;
 
 
-handles.InstructionDescription= block(1,1,.05,.7,.55,.2);
+handles.InstructionDescription= block(1,1,.05,.7,.57,.2);
 s='Here Lies the Description of the instruction being\nexecuted';
 handles.InstructionDescription.fillLocation(1,1,sprintf(s));
 handles.InstructionDescription.building(1,1).txtObj.FontSize=20;
@@ -167,7 +208,7 @@ handles.AddressingMode_Value.fillLocation(1,1,'N/A');
 handles.AddressingMode_Value.building(1,1).txtObj.FontSize=20;
 
 
-handles.AddressingModeDescription= block(1,1,.05,.4,.55,.2);
+handles.AddressingModeDescription= block(1,1,.05,.4,.57,.2);
 s='Here Lies the Description of the Addressing mode\nbeing executed';
 handles.AddressingModeDescription.fillLocation(1,1,sprintf(s));
 handles.AddressingModeDescription.building(1,1).txtObj.FontSize=16;
@@ -254,53 +295,62 @@ function startBtn_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % guidata(hObject, handles);
-if handles.jmp2End.Value==1
-%Show text content for IR Instruction
-handles.IR_Value.fillLocation(1,1,dec2hex(handles.simulationStruct.IR{end},4));
-% Calculate the index of the instruction in the instruction description
-% structure
-DescriptionIndex=find(cell2mat(handles.simulationStruct.supportedInstructions(:,1))==handles.simulationStruct.opcode(end));
-% get the text Content of the current executing instruction
-DescriptionContent=handles.simulationStruct.supportedInstructions(DescriptionIndex,2);
-% Fill the Description text of the GUI
-handles.InstructionDescription.fillLocation(1,1,sprintf(cell2mat(DescriptionContent)));
+
+    
+    
+    
+    
+    
+    for instructionNum=1:length(handles.simulationStruct.IR)
+            if handles.jmp2End.Value==1
+               instructionNum=length(handles.simulationStruct.IR);
+            end
+            %Show text content for IR Instruction
+            handles.IR_Value.fillLocation(1,1,dec2bin(handles.simulationStruct.IR{instructionNum},16));
+            % Calculate the index of the instruction in the instruction description
+            % structure
+            DescriptionIndex=find(cell2mat(handles.simulationStruct.supportedInstructions(:,1))==handles.simulationStruct.opcode(instructionNum));
+            % get the text Content of the current executing instruction
+            DescriptionContent=handles.simulationStruct.supportedInstructions(DescriptionIndex,2);
+            % Fill the Description text of the GUI
+            handles.InstructionDescription.fillLocation(1,1,sprintf(cell2mat(DescriptionContent)));
 
 
-if (handles.simulationStruct.AM(end,1)==-1 &&  handles.simulationStruct.AM(end,2)==-1)
-handles.AddressingMode_Value.fillLocation(1,1,'No Op. Instruction');
-handles.AddressingModeDescription.fillLocation(1,1,sprintf('No Op. Instruction does not access\nMemory another time '));
-elseif  (handles.simulationStruct.AM(end,1)==-1 &&  handles.simulationStruct.AM(end,2)~=-1)
-handles.AddressingMode_Value.fillLocation(1,1,'1 Operand. Instruction');
-AM_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(end,2));
-AM1_DescriptionContent=sprintf(cell2mat(handles.simulationStruct.addressingModes(AM_Index,2)));
-handles.AddressingModeDescription.fillLocation(1,1,AM1_DescriptionContent);
-else
-handles.AddressingMode_Value.fillLocation(1,1,'2 Operand. Instruction');
-AM1_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(end,1));
-AM2_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(end,2));
-AM1_DescriptionContent=sprintf(['1stOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
-AM2_DescriptionContent=sprintf(['\n2ndOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
-handles.AddressingModeDescription.fillLocation(1,1,strcat(AM1_DescriptionContent,AM2_DescriptionContent));
-end
-pivot=round(handles.memorySlider.Value);
-count=0;
-for i =  pivot:pivot+handles.NumberOfDisplayedMemoryLocations-1
-    handles.ram.fillLocation(handles.NumberOfDisplayedMemoryLocations-count,2,strcat('0x',dec2hex(handles.simulationStruct.memory(handles.MemorySize-i,end),8)));
-    count=count+1;
-end
-for i=1:size(handles.Registers.building,1)
-handles.Registers.fillLocation(i,2,dec2hex(handles.simulationStruct.registers(i,end),4));
-end
-handles.memorySlider.Value=handles.MemorySize-handles.simulationStruct.registers(1,end);
-memorySlider_Callback(hObject, eventdata, handles);
-% hObject    handle to memorySlider (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-end
+            if (handles.simulationStruct.AM(instructionNum,1)==-1 &&  handles.simulationStruct.AM(instructionNum,2)==-1)
+            handles.AddressingMode_Value.fillLocation(1,1,'0-Op. Instruction');
+            handles.AddressingModeDescription.fillLocation(1,1,sprintf('No Op. Instruction does not access\nMemory another time '));
+            elseif  (handles.simulationStruct.AM(instructionNum,1)==-1 &&  handles.simulationStruct.AM(instructionNum,2)~=-1)
+            handles.AddressingMode_Value.fillLocation(1,1,'1-Operand. Instruction');
+            AM_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(instructionNum,2));
+            AM1_DescriptionContent=sprintf(cell2mat(handles.simulationStruct.addressingModes(AM_Index,2)));
+            handles.AddressingModeDescription.fillLocation(1,1,AM1_DescriptionContent);
+            else
+            handles.AddressingMode_Value.fillLocation(1,1,'2-Operand. Instruction');
+            AM1_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(instructionNum,1));
+            AM2_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(instructionNum,2));
+            AM1_DescriptionContent=sprintf(['1stOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
+            AM2_DescriptionContent=sprintf(['\n2ndOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
+            handles.AddressingModeDescription.fillLocation(1,1,strcat(AM1_DescriptionContent,AM2_DescriptionContent));
+            end
+            pivot=round(handles.memorySlider.Value);
+            count=0;
+            for i =  pivot:pivot+handles.NumberOfDisplayedMemoryLocations-1
+                handles.ram.fillLocation(handles.NumberOfDisplayedMemoryLocations-count,2,strcat('0x',dec2hex(handles.simulationStruct.memory(handles.MemorySize-i,instructionNum),8)));
+                count=count+1;
+            end
+            for i=1:size(handles.Registers.building,1)
+            handles.Registers.fillLocation(i,1,dec2hex(handles.simulationStruct.registers(i,instructionNum),4));
+            end
+            handles.memorySlider.Value=handles.MemorySize-handles.simulationStruct.registers(1,instructionNum);
+            memorySlider_Callback(hObject, eventdata, handles);
+            if handles.jmp2End.Value~=1
+            pause(1);
+            end
+    end
+    
+    
+    
+    
 
 
 % --- Executes on slider movement.
