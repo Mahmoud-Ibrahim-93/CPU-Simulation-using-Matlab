@@ -22,7 +22,7 @@ function varargout = myGUII(varargin)
 
 % Edit the above text to modify the response to help myGUII
 
-% Last Modified by GUIDE v2.5 22-May-2019 03:17:14
+% Last Modified by GUIDE v2.5 19-May-2019 22:51:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -76,7 +76,7 @@ set(handles.memorySlider,'Units','normalized')
 set(handles.jmp2End,'Units','normalized')
 set(handles.startBtn,'Units','normalized')
 set(handles.updateSim,'Units','normalized')
-set(handles.pauseDelay,'Units','normalized')
+set(handles.pauseResumeBtn,'Units','normalized')
 
 
 % Adjust the position of txt jump2End
@@ -89,7 +89,7 @@ set(handles.updateSim,'Position',[0.23 0.95 0.15 0.04])
 
 % Adjust the position of PAUSE/RESUME button 
 % 'Position' is [x y width height])
-set(handles.pauseDelay,'Position',[0.615 0.95 0.15 0.04])
+set(handles.pauseResumeBtn,'Position',[0.615 0.95 0.15 0.04])
 
 % Adjust the position of strat button
 % 'Position' is [x y width height])
@@ -342,15 +342,10 @@ function startBtn_Callback(hObject, eventdata, handles)
             if handles.jmp2End.Value==1
             break;
             end
-%             pause(1);
-            if handles.pauseDelay.Value==1
-               pause(1);
-            elseif handles.pauseDelay.Value==2
-               pause(2);
-            elseif handles.pauseDelay.Value==3
-               pause(5);   
-            else
-            waitforbuttonpress;
+            pause(1);
+            disp(handles.pause);
+            guidata(hObject, handles);
+            while handles.pause==1
             end
     end
     
@@ -403,25 +398,19 @@ set(handles.axes1,'Color',[rand rand rand])
 guidata(hObject, handles);
 
 
-
-
-% --- Executes on selection change in pauseDelay.
-function pauseDelay_Callback(hObject, eventdata, handles)
-% hObject    handle to pauseDelay (see GCBO)
+% --- Executes on button press in pauseResumeBtn.
+function pauseResumeBtn_Callback(hObject, eventdata, handles)
+% hObject    handle to pauseResumeBtn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns pauseDelay contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from pauseDelay
-
-% --- Executes during object creation, after setting all properties.
-function pauseDelay_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pauseDelay (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
+if handles.pause==1
+set(handles.pauseResumeBtn,'BackgroundColor',[handles.pause 0 0])
+handles.pause=0;
+disp(handles.pause);
+else
+    handles.pause=1;
+    disp(handles.pause);
+    set(handles.pauseResumeBtn,'BackgroundColor',[.94,.94,.94])
 end
+guidata(hObject, handles);
+

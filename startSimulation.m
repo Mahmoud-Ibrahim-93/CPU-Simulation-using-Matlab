@@ -37,7 +37,7 @@ simulationStruct.supportedInstructions={
 56,'Branch to an address specified\nby the VA field of Op1';
 57,'Decrement R0, and check its new value.\nIf it is not zero, branch to the address\nspecified by the VA field of Op1';
 59,'Call a subroutine whose address\nis specified by the VA field of Op1.\nThe return address is saved to the stack';
-242,'Return from a subroutine call. The return address is restored fromthe stack';
+242,'Return from a subroutine call.\nThe return address is restored fromthe stack';
 244,'Load SP with a binary value of 11111111';
 254,'No Operation';
 255,'Stop execution'
