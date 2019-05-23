@@ -4,18 +4,19 @@ tic %%Elapsed time Counter start
 % clc  %%Cmd window clear
 %number of locations in memory
 MemorySize=256;
+% Initially no cycles are made
 cycleCount=0;
+% Name of external sheet that this code would save to
 sheetLocation='memory.xlsx';
+% After the execution of this code, This object
 simulationStruct=[];
-
-
-% isSix = cellfun(@(x)isequal(x,2),simlationStruct.addressingModes(:,1));
-% [row,col] = find(isSix);
+% Check if a new update to the simulation struct is needed or just go with
+% the old one
 if( newMemoryRegisterData<=0)
 load('oldSimulationData.mat','simulationStruct');
 return
 end
-
+% This code executes when a new update is required
 if( newMemoryRegisterData>0)
 % Supported Addressing modes
 simulationStruct.addressingModes={
@@ -71,20 +72,21 @@ if OpCode==15
 [simulationStruct.opcode(cycleCount+1),simulationStruct.AM(cycleCount+1,:),simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1)] = ZeroOperand(simulationStruct.registers(:,cycleCount+1),simulationStruct.memory(:,cycleCount+1),simulationStruct.IR{cycleCount+1} );
 end
 
+%% Increas cycle count with each cycle
 cycleCount=cycleCount+1;
+
 %% check code halt Instruction%%
 if(simulationStruct.IR{cycleCount} ==255)
    break; 
 end
 
-
- % Copy a version of the prev memory and register state
+%% Copy a version of the prev memory and register state
   simulationStruct.memory(:,cycleCount+1)=simulationStruct.memory(:,cycleCount);
   simulationStruct.registers(:,cycleCount+1)=simulationStruct.registers(:,cycleCount);
 end
 
 if( newMemoryRegisterData>0)
-% write the Execution data to the Excel
+% write the Execution data to the Excel if the simulation Struct is updated
 write2Excel(sheetLocation,simulationStruct);
 save('oldSimulationData.mat','simulationStruct') 
 end

@@ -60,7 +60,7 @@ classdef location < handle
           obj.paint();
       end
       
-      % changes the color of the location back and forth by the number numberOfAnumations
+      % for future release changes the color of the location back and forth by the number numberOfAnumations
       function obj=animate(obj,numberOfAnumations,animationLength)
         InitialColor=obj.box.FaceColor;
         if nargin==1 
@@ -87,7 +87,7 @@ classdef location < handle
         end
       end
       
-      
+      % For future release (Swap 2 locations )
       function obj=swap(obj,destinationLocation)
           
           srcLocations=[obj.margin_left,obj.margin_buttom];
@@ -96,6 +96,7 @@ classdef location < handle
           destinationLocation.animate(2);
           obj.animate(2);
           
+          % Motion on the x axis
           for i=1:obj.animationSteps/2
               obj.margin_left=obj.margin_left+deltaLocations(1)/(obj.animationSteps/2);
               destinationLocation.margin_left=destinationLocation.margin_left-deltaLocations(1)/(obj.animationSteps/2);
@@ -103,7 +104,8 @@ classdef location < handle
               destinationLocation.paint();
               pause(obj.animationLength/2);
           end
-
+          
+          % Motion on the y-axis
           for i=1:obj.animationSteps/2
               obj.margin_buttom=obj.margin_buttom+deltaLocations(2)/(obj.animationSteps/2);
               destinationLocation.margin_buttom=destinationLocation.margin_buttom-deltaLocations(2)/(obj.animationSteps/2);

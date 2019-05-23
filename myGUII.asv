@@ -312,8 +312,7 @@ function startBtn_Callback(hObject, eventdata, handles)
             if handles.jmp2End.Value==1
             break;
             end
-            % Controls the animation display mode according to the POPUP
-            % menu chosen value
+            % Controls the ania
             if handles.pauseDelay.Value==1
                pause(1);
             elseif handles.pauseDelay.Value==2
@@ -338,8 +337,6 @@ function memorySlider_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
-
-% Controls the displayed memory locations on the GUI
 pivot=round(handles.memorySlider.Value);
 count=0;
 for i =  pivot:pivot+handles.NumberOfDisplayedMemoryLocations-1
@@ -370,7 +367,7 @@ function updateSim_Callback(hObject, eventdata, handles)
 % hObject    handle to updateSim (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-msgbox('Please wait until simulation object is created then the color of the axes would change','Plaeas be patient!')
+msgbox('Please wait until simulation object is created then the color of the axes would change')
 [handles.MemorySize,handles.simulationStruct]=startSimulation(1);
 set(handles.axes1,'Color',[rand rand rand])
 guidata(hObject, handles);

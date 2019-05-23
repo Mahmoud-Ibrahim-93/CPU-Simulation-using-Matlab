@@ -1,18 +1,22 @@
 function [OpCode,addressingMode,registers,memory,IR] = TwoOperand (registers,memory,IR)
+% Executes a 2-OP instruction and update corresponding registers and Ram
+% locations
 OpCode=bitshift(IR,-4);
+% a 2 Operand instruction is 16 bit in width
 IR=bitshift(IR,8)+memory(registers(1)+2); % Big Endian
+% PC should be add 2 more steps since the current instruction is 2-bytes wide
 registers(1)=registers(1)+2; %PC
 % AM1 Addressing mode for operand 1
 AM1=bitshift(bitand(IR,3072),-10);
-
 % AM2 Addressing mode for operand 2
 AM2=bitshift(bitand(IR,48),-4);
+% The return addressing mode for the simulation struct
 addressingMode=[AM1,AM2];
 % Op1 Operand 1 Value
 OP1=bitshift(bitand(IR,960),-6);
-
 % Op1 Operand 2 Value
 OP2=bitand(IR,15);
+
 switch OpCode           
     case 0 % Copy OP2 to OP1
         switch AM1
