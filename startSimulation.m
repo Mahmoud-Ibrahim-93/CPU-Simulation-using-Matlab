@@ -26,21 +26,21 @@ simulationStruct.addressingModes={
 };
 % Supported instructions
 simulationStruct.supportedInstructions={
-0,'Copy Op2 to Op1';
-2,'Add Op2 to Op1 and store the result to Op1';
-3,'Subtract Op2 from Op1 and store the result to Op1';
-8,'XOR Op2 with Op1 and store the result to Op1';
-48,'Shift Op1 logically one-bit position to the left.';
-49,'Shift Op1 arithmetically one-bit\nposition to the left';
-52,'Decrement SP, and then put Op1\non top of the stack';
-53,'Copy the top element of the\nstack to Op1, and then increment SP';
-56,'Branch to an address specified\nby the VA field of Op1';
-57,'Decrement R0, and check its new value.\nIf it is not zero, branch to the address\nspecified by the VA field of Op1';
-59,'Call a subroutine whose address\nis specified by the VA field of Op1.\nThe return address is saved to the stack';
-242,'Return from a subroutine call.\nThe return address is restored fromthe stack';
-244,'Load SP with a binary value of 11111111';
-254,'No Operation';
-255,'Stop execution'
+0,'MOV Op1, Op2\nCopy Op2 to Op1';
+2,'ADD Op1, Op2\nAdd Op2 to Op1 and store the result to Op1';
+3,'SUB Op1, Op2\nSUB Op1, Op2\nSubtract Op2 from Op1 and store the result to Op1';
+8,'XOR Op1, Op2\nXOR Op2 with Op1 and store the result to Op1';
+48,'LSL Op1\nShift Op1 logically one-bit position to the left.';
+49,'ASL Op1\nShift Op1 arithmetically one-bit\nposition to the left';
+52,'PUSH Op1\nDecrement SP, and then put Op1\non top of the stack';
+53,'POP Op1\nCopy the top element of the\nstack to Op1, and then increment SP';
+56,'JUMP Op1\nBranch to an address specified\nby the VA field of Op1';
+57,'DJNZ Op1\nDecrement R0, and check its new value.\nIf it is not zero, branch to the address\nspecified by the VA field of Op1';
+59,'CALL Op1\nCall a subroutine whose address\nis specified by the VA field of Op1.\nThe return address is saved to the stack';
+242,'RETURN\nReturn from a subroutine call.\nThe return address is restored fromthe stack';
+244,'INITSP\nLoad SP with a binary value of 11111111';
+254,'NOP\nNo Operation';
+255,'HALT\nStop execution'
 };
     
 %%import memory data

@@ -64,6 +64,7 @@ handles.NumberOfDisplayedMemoryLocations=15;
 handles.pause=0;
 
 set(handles.axes1,'Position',[.05 0.05 .9 0.9])
+set(handles.axes1,'Color',[.94 .94 .94])
 
 [handles.MemorySize,handles.simulationStruct]=startSimulation(0);
 
@@ -158,7 +159,7 @@ handles.slice_1.building(1,3).txtObj.FontSize=10;
 handles.slice_2=block (1,2,0.38,.28,.12,.0575);
 handles.slice_2.fillLocation(1,1,' 2-bit Addressing mode');
 handles.slice_2.building(1,1).txtObj.FontSize=10;
-handles.slice_2.fillLocation(1,2,' 4-bit Address/Value');
+handles.slice_2.fillLocation(1,2,' 4-bit Value/Address');
 handles.slice_2.building(1,2).txtObj.FontSize=10;
 
 handles.slice_2=block (1,2,0.38,.2225,.12,.0575);
@@ -325,7 +326,7 @@ function startBtn_Callback(hObject, eventdata, handles)
             AM1_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(instructionNum,1));
             AM2_Index=find(cell2mat(handles.simulationStruct.addressingModes(:,1))==handles.simulationStruct.AM(instructionNum,2));
             AM1_DescriptionContent=sprintf(['1stOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
-            AM2_DescriptionContent=sprintf(['\n2ndOperand:',cell2mat(handles.simulationStruct.addressingModes(AM1_Index,2))]);
+            AM2_DescriptionContent=sprintf(['\n2ndOperand:',cell2mat(handles.simulationStruct.addressingModes(AM2_Index,2))]);
             handles.AddressingModeDescription.fillLocation(1,1,strcat(AM1_DescriptionContent,AM2_DescriptionContent));
             end
             pivot=round(handles.memorySlider.Value);
