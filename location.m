@@ -51,7 +51,7 @@ classdef location < handle
       %Paint the location to the GUI
       function paint(obj)
         set(obj.txtObj,'Position',[obj.margin_left,obj.locationHeight/2+obj.margin_buttom])
-        set(obj.box,'Position',[obj.margin_left,obj.margin_buttom,obj.locationWidth,obj.locationHeight],'Curvature',0.15,'FaceColor',[.39,.95,.35]);
+        set(obj.box,'Position',[obj.margin_left,obj.margin_buttom,obj.locationWidth,obj.locationHeight],'Curvature',0.15,'FaceColor',[.5+.5*rand,.5+.5*rand,.5+.5*rand]);
       end
       
       % move the location to the right
