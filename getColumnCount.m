@@ -1,4 +1,3 @@
-
 function arr = getColumnCount(num)
 % returns the excel column for a given number
 i=1;
